@@ -2,8 +2,10 @@ package br.com.neki.gerenciador_eventos.controller;
 
 import java.util.List;
 
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,14 +30,24 @@ public class EventoController {
         this.eventoService = eventoService;
     }
 
-    @GetMapping("/administrador/{adminId}")
-    public ResponseEntity<List<EventoResponseDTO>> listarPorAdministrador(@PathVariable Long adminId){
-        return ResponseEntity.ok(eventoService.listarPorAdministrador(adminId));
-    }
+  @GetMapping
+   public ResponseEntity<List<EventoResponseDTO>> listarPorAdministrador(
+        @AuthenticationPrincipal Jwt jwt) {
+
+    Number adminIdClaim = jwt.getClaim("adminId");
+    Long adminId = adminIdClaim.longValue();
+
+    return ResponseEntity.ok(
+        eventoService.listarPorAdministrador(adminId)
+    );
+}
 
     @PostMapping
-    public ResponseEntity<EventoResponseDTO> cadastrar(@Valid @RequestBody EventoRequestDTO dto){
-        EventoResponseDTO resposta = eventoService.cadastrar(dto);
+    public ResponseEntity<EventoResponseDTO> cadastrar(@Valid @RequestBody EventoRequestDTO dto, @AuthenticationPrincipal Jwt jwt){
+        Number adminIdClaim = jwt.getClaim("adminId");
+        Long adminId = adminIdClaim.longValue();
+
+        EventoResponseDTO resposta = eventoService.cadastrar(dto, adminId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
@@ -43,16 +55,23 @@ public class EventoController {
    @PatchMapping("/{eventoId}")
     public ResponseEntity<EventoResponseDTO> atualizar(
         @PathVariable Long eventoId,
-        @RequestBody EventoUpdateDTO dto) {
+        @RequestBody EventoUpdateDTO dto, @AuthenticationPrincipal Jwt jwt) {
 
-    EventoResponseDTO resposta = eventoService.atualizar(eventoId, dto);
+    Number adminIdClaim = jwt.getClaim("adminId");
+    Long adminId = adminIdClaim.longValue();
+
+    EventoResponseDTO resposta = eventoService.atualizar(eventoId, dto, adminId);
 
     return ResponseEntity.ok(resposta);
 }
 
     @DeleteMapping("/{eventoId}")
-    public ResponseEntity<Void> excluir(@PathVariable Long eventoId){
-        eventoService.excluir(eventoId);
+    public ResponseEntity<Void> excluir(@PathVariable Long eventoId, @AuthenticationPrincipal Jwt jwt){
+
+        Number adminIdClaim = jwt.getClaim("adminId");
+        Long adminId = adminIdClaim.longValue();
+
+        eventoService.excluir(eventoId, adminId);
         return ResponseEntity.noContent().build();
     }
 }

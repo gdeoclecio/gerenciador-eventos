@@ -41,9 +41,9 @@ public List<EventoResponseDTO> listarPorAdministrador(Long adminId) {
         .map(this::toResponseDTO)
         .toList();
 }
-    public EventoResponseDTO cadastrar (EventoRequestDTO dto){
+    public EventoResponseDTO cadastrar (EventoRequestDTO dto, Long adminId){
         Administrador administrador = administradorRepository
-        .findById(dto.adminId())
+        .findById(adminId)
         .orElseThrow(() -> new RuntimeException("Administrador não encontrado"));
 
         Evento evento = new Evento(
@@ -57,9 +57,13 @@ public List<EventoResponseDTO> listarPorAdministrador(Long adminId) {
         return toResponseDTO(salvo);
     }
 
-    public EventoResponseDTO atualizar(Long eventoId, EventoUpdateDTO dto){
+    public EventoResponseDTO atualizar(Long eventoId, EventoUpdateDTO dto, Long adminId){
         Evento evento = eventoRepository.findById(eventoId)
         .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
+
+        if(!evento.getAdministrador().getId().equals(adminId)) {
+            throw new RuntimeException("Acesso não autorizado");
+        }
 
         if (dto.data() != null){
             evento.setData(dto.data());
@@ -70,9 +74,14 @@ public List<EventoResponseDTO> listarPorAdministrador(Long adminId) {
         Evento salvo = eventoRepository.save(evento);
         return toResponseDTO(salvo);
     }
-    public void excluir(Long eventoId){
+    
+    public void excluir(Long eventoId, Long adminId){
         Evento evento = eventoRepository.findById(eventoId)
         .orElseThrow(()-> new RuntimeException("Evento não encontrado"));
+
+        if(!evento.getAdministrador().getId().equals(adminId)) {
+            throw new RuntimeException("Acesso não autorizado");
+        }
 
         eventoRepository.delete(evento);
     }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.neki.gerenciador_eventos.dto.administrador.AdministradorRequestDTO;
 import br.com.neki.gerenciador_eventos.dto.administrador.AdministradorResponseDTO;
+import br.com.neki.gerenciador_eventos.dto.auth.LoginRequestDTO;
 import br.com.neki.gerenciador_eventos.entity.Administrador;
 import br.com.neki.gerenciador_eventos.repository.AdministradorRepository;
 
@@ -39,5 +40,17 @@ public class AdministradorService {
             salvo.getNome(),
             salvo.getEmail()
         );
+    }
+    public Administrador autenticar(LoginRequestDTO dto){
+        Administrador administrador = administradorRepository
+        .findByEmail(dto.email())
+        .orElseThrow(()-> new RuntimeException("Credenciais inválidas"));
+
+        boolean senhaValida = passwordEncoder.matches(dto.senha(), administrador.getSenha());
+
+        if(!senhaValida) {
+            throw new RuntimeException("Credenciais inválidas");
+        }
+        return administrador;
     }
 }

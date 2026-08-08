@@ -19,10 +19,8 @@ public record EventoRequestDTO(
     String localizacao,
 
     @Size(max = 255)
-    String imagem,
+    String imagem
 
-    @NotNull
-    Long adminId
 ) {
 
     
