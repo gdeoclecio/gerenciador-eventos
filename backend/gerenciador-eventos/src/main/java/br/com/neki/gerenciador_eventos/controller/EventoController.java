@@ -19,31 +19,49 @@ import br.com.neki.gerenciador_eventos.dto.evento.EventoRequestDTO;
 import br.com.neki.gerenciador_eventos.dto.evento.EventoResponseDTO;
 import br.com.neki.gerenciador_eventos.dto.evento.EventoUpdateDTO;
 import br.com.neki.gerenciador_eventos.service.EventoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/eventos")
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Eventos", description = "Operações de cadastro, listagem, atualização e exclusão de eventos")
 public class EventoController {
     private final EventoService eventoService;
 
-    public EventoController(EventoService eventoService){
+    public EventoController(EventoService eventoService) {
         this.eventoService = eventoService;
     }
 
-  @GetMapping
-   public ResponseEntity<List<EventoResponseDTO>> listarPorAdministrador(
-        @AuthenticationPrincipal Jwt jwt) {
+    @GetMapping
+    @Operation(summary = "Listar eventos", description = "Lista os eventos pertencentes ao administrador autenticado")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Eventos listados"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado")
+    })
+    public ResponseEntity<List<EventoResponseDTO>> listarPorAdministrador(
+            @AuthenticationPrincipal Jwt jwt) {
 
-    Number adminIdClaim = jwt.getClaim("adminId");
-    Long adminId = adminIdClaim.longValue();
+        Number adminIdClaim = jwt.getClaim("adminId");
+        Long adminId = adminIdClaim.longValue();
 
-    return ResponseEntity.ok(
-        eventoService.listarPorAdministrador(adminId)
-    );
-}
+        return ResponseEntity.ok(
+                eventoService.listarPorAdministrador(adminId));
+    }
 
     @PostMapping
-    public ResponseEntity<EventoResponseDTO> cadastrar(@Valid @RequestBody EventoRequestDTO dto, @AuthenticationPrincipal Jwt jwt){
+    @Operation(summary = "Cadastrar evento", description = "cadastra um novo evento para o administrador autenticado")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Evento cadastrado"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado")
+    })
+    public ResponseEntity<EventoResponseDTO> cadastrar(@Valid @RequestBody EventoRequestDTO dto,
+            @AuthenticationPrincipal Jwt jwt) {
         Number adminIdClaim = jwt.getClaim("adminId");
         Long adminId = adminIdClaim.longValue();
 
@@ -52,21 +70,37 @@ public class EventoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 
-   @PatchMapping("/{eventoId}")
+    @PatchMapping("/{eventoId}")
+    @Operation(summary = "Atualizar evento", description = "Atualiza a data e/ou localização de um evento pertencente ao administrador autenticado")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Evento atualizado"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado"),
+            @ApiResponse(responseCode = "403", description = "Evento pertence a outro administrador"),
+            @ApiResponse(responseCode = "404", description = "Evento não encontrado")
+
+    })
     public ResponseEntity<EventoResponseDTO> atualizar(
-        @PathVariable Long eventoId,
-        @RequestBody EventoUpdateDTO dto, @AuthenticationPrincipal Jwt jwt) {
+            @PathVariable Long eventoId,
+            @RequestBody EventoUpdateDTO dto, @AuthenticationPrincipal Jwt jwt) {
 
-    Number adminIdClaim = jwt.getClaim("adminId");
-    Long adminId = adminIdClaim.longValue();
+        Number adminIdClaim = jwt.getClaim("adminId");
+        Long adminId = adminIdClaim.longValue();
 
-    EventoResponseDTO resposta = eventoService.atualizar(eventoId, dto, adminId);
+        EventoResponseDTO resposta = eventoService.atualizar(eventoId, dto, adminId);
 
-    return ResponseEntity.ok(resposta);
-}
+        return ResponseEntity.ok(resposta);
+    }
 
     @DeleteMapping("/{eventoId}")
-    public ResponseEntity<Void> excluir(@PathVariable Long eventoId, @AuthenticationPrincipal Jwt jwt){
+    @Operation(summary = "Excluir evento", description = "Exclui um evento pertencente ao administrador autenticado")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Evento excluido"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado"),
+            @ApiResponse(responseCode = "403", description = "Evento pertence a outro administrador"),
+            @ApiResponse(responseCode = "404", description = "Evento não encontrado")
+    })
+    public ResponseEntity<Void> excluir(@PathVariable Long eventoId, @AuthenticationPrincipal Jwt jwt) {
 
         Number adminIdClaim = jwt.getClaim("adminId");
         Long adminId = adminIdClaim.longValue();
