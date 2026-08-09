@@ -21,6 +21,7 @@ public record EventoRequestDTO(
     @Size(max = 255)
     String imagem
 
+  
 ) {
 
     

@@ -11,6 +11,7 @@ import br.com.neki.gerenciador_eventos.dto.auth.LoginResponseDTO;
 import br.com.neki.gerenciador_eventos.entity.Administrador;
 import br.com.neki.gerenciador_eventos.service.AdministradorService;
 import br.com.neki.gerenciador_eventos.service.JwtService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO dto) {
+    public ResponseEntity<LoginResponseDTO> login( @Valid @RequestBody LoginRequestDTO dto) {
 
         Administrador administrador = administradorService.autenticar(dto);
         

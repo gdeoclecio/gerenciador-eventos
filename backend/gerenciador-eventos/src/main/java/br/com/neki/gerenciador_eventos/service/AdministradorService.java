@@ -7,6 +7,8 @@ import br.com.neki.gerenciador_eventos.dto.administrador.AdministradorRequestDTO
 import br.com.neki.gerenciador_eventos.dto.administrador.AdministradorResponseDTO;
 import br.com.neki.gerenciador_eventos.dto.auth.LoginRequestDTO;
 import br.com.neki.gerenciador_eventos.entity.Administrador;
+import br.com.neki.gerenciador_eventos.exception.CredenciaisInvalidasException;
+import br.com.neki.gerenciador_eventos.exception.EmailJaCadastradoException;
 import br.com.neki.gerenciador_eventos.repository.AdministradorRepository;
 
 @Service
@@ -23,7 +25,7 @@ public class AdministradorService {
     
     public AdministradorResponseDTO cadastrar(AdministradorRequestDTO dto){
         if(administradorRepository.existsByEmail(dto.email())){
-            throw new RuntimeException("Email já cadastrado");
+            throw new EmailJaCadastradoException("Email já cadastrado");
         }
         String senhaCriptografada = passwordEncoder.encode(dto.senha());
 
@@ -44,12 +46,12 @@ public class AdministradorService {
     public Administrador autenticar(LoginRequestDTO dto){
         Administrador administrador = administradorRepository
         .findByEmail(dto.email())
-        .orElseThrow(()-> new RuntimeException("Credenciais inválidas"));
+        .orElseThrow(()-> new CredenciaisInvalidasException("Credenciais inválidas"));
 
         boolean senhaValida = passwordEncoder.matches(dto.senha(), administrador.getSenha());
 
         if(!senhaValida) {
-            throw new RuntimeException("Credenciais inválidas");
+            throw new CredenciaisInvalidasException("Credenciais inválidas");
         }
         return administrador;
     }

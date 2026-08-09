@@ -10,6 +10,9 @@ import br.com.neki.gerenciador_eventos.dto.evento.EventoResponseDTO;
 import br.com.neki.gerenciador_eventos.dto.evento.EventoUpdateDTO;
 import br.com.neki.gerenciador_eventos.entity.Administrador;
 import br.com.neki.gerenciador_eventos.entity.Evento;
+import br.com.neki.gerenciador_eventos.exception.AcessoNegadoException;
+import br.com.neki.gerenciador_eventos.exception.AdministradorNaoEncontradoException;
+import br.com.neki.gerenciador_eventos.exception.EventoNaoEncontradoException;
 import br.com.neki.gerenciador_eventos.repository.AdministradorRepository;
 import br.com.neki.gerenciador_eventos.repository.EventoRepository;
 
@@ -44,7 +47,7 @@ public List<EventoResponseDTO> listarPorAdministrador(Long adminId) {
     public EventoResponseDTO cadastrar (EventoRequestDTO dto, Long adminId){
         Administrador administrador = administradorRepository
         .findById(adminId)
-        .orElseThrow(() -> new RuntimeException("Administrador não encontrado"));
+        .orElseThrow(() -> new AdministradorNaoEncontradoException("Administrador não encontrado"));
 
         Evento evento = new Evento(
             dto.nome(),
@@ -58,11 +61,14 @@ public List<EventoResponseDTO> listarPorAdministrador(Long adminId) {
     }
 
     public EventoResponseDTO atualizar(Long eventoId, EventoUpdateDTO dto, Long adminId){
+        if (dto.data() == null && (dto.localizacao() == null || dto.localizacao().isBlank())) {
+            throw new IllegalArgumentException("Informe a data ou a localização para atualização ");
+        }
         Evento evento = eventoRepository.findById(eventoId)
-        .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
+        .orElseThrow(() -> new EventoNaoEncontradoException("Evento não encontrado"));
 
         if(!evento.getAdministrador().getId().equals(adminId)) {
-            throw new RuntimeException("Acesso não autorizado");
+            throw new AcessoNegadoException("Acesso não autorizado");
         }
 
         if (dto.data() != null){
@@ -77,10 +83,10 @@ public List<EventoResponseDTO> listarPorAdministrador(Long adminId) {
     
     public void excluir(Long eventoId, Long adminId){
         Evento evento = eventoRepository.findById(eventoId)
-        .orElseThrow(()-> new RuntimeException("Evento não encontrado"));
+        .orElseThrow(()-> new EventoNaoEncontradoException("Evento não encontrado"));
 
         if(!evento.getAdministrador().getId().equals(adminId)) {
-            throw new RuntimeException("Acesso não autorizado");
+            throw new AcessoNegadoException("Acesso não autorizado");
         }
 
         eventoRepository.delete(evento);
