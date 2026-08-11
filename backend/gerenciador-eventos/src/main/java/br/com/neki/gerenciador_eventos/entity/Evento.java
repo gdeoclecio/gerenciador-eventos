@@ -45,13 +45,8 @@ public class Evento {
     public Long getId(){
         return id;
     }
-
-
     public String getNome(){
         return nome;
-    }
-    public void setNome(String nome){
-        this.nome = nome;
     }
     public LocalDate getData(){
         return data;
@@ -68,14 +63,7 @@ public class Evento {
     public String getImagem(){
         return imagem;
     }
-    public void setImagem(String imagem){
-        this.imagem = imagem;
-    }
-
     public Administrador getAdministrador(){
         return administrador;
-    }
-    public void setAdministrador(Administrador administrador){
-        this.administrador = administrador;
     }
 }

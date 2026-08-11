@@ -62,7 +62,7 @@ public List<EventoResponseDTO> listarPorAdministrador(Long adminId) {
 
     public EventoResponseDTO atualizar(Long eventoId, EventoUpdateDTO dto, Long adminId){
         if (dto.data() == null && (dto.localizacao() == null || dto.localizacao().isBlank())) {
-            throw new IllegalArgumentException("Informe a data ou a localização para atualização ");
+            throw new IllegalArgumentException("Informe a data ou a localização para atualização");
         }
         Evento evento = eventoRepository.findById(eventoId)
         .orElseThrow(() -> new EventoNaoEncontradoException("Evento não encontrado"));

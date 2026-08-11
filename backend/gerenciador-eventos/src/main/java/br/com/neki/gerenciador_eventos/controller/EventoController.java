@@ -82,7 +82,7 @@ public class EventoController {
     })
     public ResponseEntity<EventoResponseDTO> atualizar(
             @PathVariable Long eventoId,
-            @RequestBody EventoUpdateDTO dto, @AuthenticationPrincipal Jwt jwt) {
+            @Valid @RequestBody EventoUpdateDTO dto, @AuthenticationPrincipal Jwt jwt) {
 
         Number adminIdClaim = jwt.getClaim("adminId");
         Long adminId = adminIdClaim.longValue();

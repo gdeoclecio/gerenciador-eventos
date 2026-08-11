@@ -31,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    @Operation(summary = "Realizar login", description = "Autentica o administrador e retorna um token JWt")
+    @Operation(summary = "Realizar login", description = "Autentica o administrador e retorna um token JWT")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Login realizado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos"),
