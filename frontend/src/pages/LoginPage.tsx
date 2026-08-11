@@ -5,25 +5,33 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 export function LoginPage() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const [erro, setErro] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
     const mensagemSucesso = location.state?.mensagem;
 
-    async function handleSubmit(event: React.FormEvent) {
-        event.preventDefault();
+  async function handleSubmit(event: React.FormEvent) {
+  event.preventDefault();
 
-        const resposta = await login({
-            email,
-            senha,
-        });
+  try {
+    setErro("");
 
-        salvarToken(resposta.token)
-        navigate("/eventos")
-    }
+    const resposta = await login({
+      email,
+      senha,
+    });
+
+    salvarToken(resposta.token);
+    navigate("/eventos");
+  } catch {
+    setErro("Email ou senha inválidos");
+  }
+}
 
     return(
         <form onSubmit={handleSubmit}>
             {mensagemSucesso && <p>{mensagemSucesso}</p>}
+            {erro && <p>{erro}</p>}
             <input type="email"
             placeholder="Email"
             value={email}
