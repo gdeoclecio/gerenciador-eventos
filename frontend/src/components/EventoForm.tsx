@@ -10,23 +10,32 @@ export function EventoForm({ onEventoCadastrado }: EventoFormProps) {
   const [data, setData] = useState("");
   const [localizacao, setLocalizacao] = useState("");
   const [imagem, setImagem] = useState("");
+  const [erro, setErro] = useState("");
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    await cadastrarEvento({
-      nome,
-      data,
-      localizacao,
-      imagem,
-    });
+    try {
+      setErro("");
 
-    setNome("");
-    setData("");
-    setLocalizacao("");
-    setImagem("");
+      await cadastrarEvento({
+        nome,
+        data,
+        localizacao,
+        imagem,
+      });
 
-    onEventoCadastrado();
+      setNome("");
+      setData("");
+      setLocalizacao("");
+      setImagem("");
+
+      onEventoCadastrado();
+    } catch {
+      setErro(
+        "Não foi possível cadastrar o evento. Verifique os dados informados.",
+      );
+    }
   }
 
   return (
@@ -57,8 +66,8 @@ export function EventoForm({ onEventoCadastrado }: EventoFormProps) {
         value={imagem}
         onChange={(event) => setImagem(event.target.value)}
       />
-
       <button type="submit">Adicionar Evento</button>
+       {erro && <p>{erro}</p>}
     </form>
   );
 }

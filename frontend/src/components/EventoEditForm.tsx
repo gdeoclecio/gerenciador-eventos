@@ -15,9 +15,13 @@ export function EventoEditForm({
 }: EventoEditFormProps) {
   const [data, setData] = useState(evento.data);
   const [localizacao, setLocalizacao] = useState(evento.localizacao);
+  const [erro, setErro] = useState("");
 
-  async function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
+async function handleSubmit(event: React.FormEvent) {
+  event.preventDefault();
+
+  try {
+    setErro("");
 
     await atualizarEvento(evento.id, {
       data,
@@ -25,7 +29,10 @@ export function EventoEditForm({
     });
 
     onEventoAtualizado();
+  } catch {
+    setErro("Não foi possível atualizar o evento.");
   }
+}
 
   return (
     <form onSubmit={handleSubmit}>
@@ -40,6 +47,8 @@ export function EventoEditForm({
         value={localizacao}
         onChange={(event) => setLocalizacao(event.target.value)}
       />
+
+      {erro && <p>{erro}</p>}
 
       <button type="submit">Salvar alterações</button>
       <button type="button" onClick={onCancelar}>

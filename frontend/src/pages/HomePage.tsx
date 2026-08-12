@@ -10,6 +10,7 @@ export function HomePage() {
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [eventoEmEdicao, setEventoEmEdicao] = useState<number | null>(null);
   const navigate = useNavigate();
+  const [erro, setErro] = useState("");
 
   function handleLogout() {
     removerToken();
@@ -17,8 +18,14 @@ export function HomePage() {
   }
 
   async function recarregarEventos() {
-    const resposta = await listarEventos();
-    setEventos(resposta);
+    try {
+      setErro("");
+
+      const resposta = await listarEventos();
+      setEventos(resposta);
+    } catch {
+      setErro("Não foi possível carregar os eventos.");
+    }
   }
   async function handleExcluir(eventoId: number) {
     const confirmou = window.confirm(
@@ -29,17 +36,28 @@ export function HomePage() {
       return;
     }
 
-    await excluirEvento(eventoId);
-    await recarregarEventos();
+    try {
+      setErro("");
+
+      await excluirEvento(eventoId);
+      await recarregarEventos();
+    } catch {
+      setErro("Não foi possível excluir o evento.");
+    }
   }
 
   useEffect(() => {
-    listarEventos().then(setEventos);
+    listarEventos()
+      .then(setEventos)
+      .catch(() => {
+        setErro("Não foi possível carregar os eventos.");
+      });
   }, []);
 
   return (
     <div>
       <h1>Meus Eventos</h1>
+      {erro && <p>{erro}</p>}
       <button onClick={handleLogout}>Sair</button>
 
       <EventoForm onEventoCadastrado={recarregarEventos} />
