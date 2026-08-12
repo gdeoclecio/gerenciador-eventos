@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { excluirEvento, listarEventos } from "../services/eventoService";
 import type { Evento } from "../types/evento";
-import { EventoForm } from "../components/EventoForm";
+import { EventoModal } from "../components/EventoModal";
 import { useNavigate } from "react-router-dom";
 import { removerToken } from "../services/authService";
 import { EventoCard } from "../components/EventoCard";
@@ -12,6 +12,7 @@ export function HomePage() {
   const [eventoEmEdicao, setEventoEmEdicao] = useState<number | null>(null);
   const navigate = useNavigate();
   const [erro, setErro] = useState("");
+  const [modalAberta, setModalAberta] = useState(false);
 
   function handleLogout() {
     removerToken();
@@ -63,14 +64,30 @@ export function HomePage() {
           <p>Gerencie seus eventos em um só lugar.</p>
         </div>
 
-        <button className="btn btn-secondary" type="button" onClick={handleLogout}>
+        <button
+          className="btn btn-secondary"
+          type="button"
+          onClick={handleLogout}
+        >
           Sair
         </button>
       </header>
 
       {erro && <p>{erro}</p>}
 
-      <EventoForm onEventoCadastrado={recarregarEventos} />
+      <button
+        className="btn btn-primary"
+        type="button"
+        onClick={() => setModalAberta(true)}
+      >
+        Adicionar Evento
+      </button>
+      {modalAberta && (
+        <EventoModal
+          onFechar={() => setModalAberta(false)}
+          onEventoCadastrado={recarregarEventos}
+        />
+      )}
 
       {eventos.length === 0 ? (
         <p>Nenhum evento cadastrado.</p>

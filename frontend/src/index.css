@@ -22,6 +22,7 @@ input {
   cursor: pointer;
   transition: 0.2s;
 }
+
 .btn-primary {
   background: #2563eb;
   color: white;
@@ -30,6 +31,7 @@ input {
 .btn-primary:hover {
   background: #1d4ed8;
 }
+
 .btn-secondary {
   background: white;
   color: #374151;
@@ -39,6 +41,7 @@ input {
 .btn-secondary:hover {
   background: #f3f4f6;
 }
+
 .btn-danger {
   background: #dc2626;
   color: white;

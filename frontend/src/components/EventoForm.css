@@ -19,13 +19,6 @@
   border-radius: 8px;
 }
 
-.evento-form button {
-  width: fit-content;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
 @media (max-width: 768px) {
   .evento-form button {
     width: 100%;

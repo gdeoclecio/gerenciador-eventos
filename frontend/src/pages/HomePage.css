@@ -1,6 +1,8 @@
 .home-page {
   min-height: 100vh;
   padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .home-header {
@@ -20,18 +22,12 @@
   color: #6b7280;
 }
 
-.home-header button {
-  padding: 10px 18px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background: white;
-  cursor: pointer;
-}
 .eventos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 20px;
 }
+
 @media (max-width: 768px) {
   .home-page {
     padding: 20px;

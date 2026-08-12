@@ -4,8 +4,19 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Auth.css";
 
 export function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [email, setEmail] = useState(
+    () => localStorage.getItem("emailSalvo") ?? "",
+  );
+
+  const [senha, setSenha] = useState(
+    () => localStorage.getItem("senhaSalva") ?? "",
+  );
+
+  const [gravarSenha, setGravarSenha] = useState(
+    () =>
+      !!localStorage.getItem("emailSalvo") &&
+      !!localStorage.getItem("senhaSalva"),
+  );
   const [erro, setErro] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,6 +34,13 @@ export function LoginPage() {
       });
 
       salvarToken(resposta.token);
+      if (gravarSenha) {
+        localStorage.setItem("emailSalvo", email);
+        localStorage.setItem("senhaSalva", senha);
+      } else {
+        localStorage.removeItem("emailSalvo");
+        localStorage.removeItem("senhaSalva");
+      }
       navigate("/eventos");
     } catch {
       setErro("Email ou senha inválidos");
@@ -55,6 +73,14 @@ export function LoginPage() {
             value={senha}
             onChange={(event) => setSenha(event.target.value)}
           />
+          <label>
+            <input
+              type="checkbox"
+              checked={gravarSenha}
+              onChange={(event) => setGravarSenha(event.target.checked)}
+            />
+            Gravar senha
+          </label>
 
           <button className="btn btn-primary" type="submit">
             Entrar
