@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { cadastrarEvento } from "../services/eventoService";
+import "./EventoForm.css";
 
 interface EventoFormProps {
   onEventoCadastrado: () => void;

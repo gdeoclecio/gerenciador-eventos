@@ -1,0 +1,53 @@
+.evento-card {
+  display: flex;
+  gap: 24px;
+  padding: 20px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.evento-card-imagem {
+  width: 220px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.evento-card-conteudo {
+  flex: 1;
+}
+
+.evento-card-conteudo h2 {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.evento-card-conteudo p {
+  margin: 6px 0;
+  color: #6b7280;
+}
+
+.evento-card-acoes {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+@media (max-width: 768px) {
+  .evento-card {
+    flex-direction: column;
+  }
+
+  .evento-card-imagem {
+    width: 100%;
+    height: 200px;
+  }
+
+  .evento-card-acoes {
+    flex-direction: column;
+  }
+
+  .evento-card-acoes .btn {
+    width: 100%;
+  }
+}

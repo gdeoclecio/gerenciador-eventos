@@ -1,5 +1,6 @@
 import type { Evento } from "../types/evento";
 import { EventoEditForm } from "./EventoEditForm";
+import "./EventoCard.css";
 
 interface EventoCardProps {
   evento: Evento;

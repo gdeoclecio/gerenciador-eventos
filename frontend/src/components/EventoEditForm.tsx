@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { atualizarEvento } from "../services/eventoService";
 import type { Evento } from "../types/evento";
+import "./EventoEditForm.css";
 
 interface EventoEditFormProps {
   evento: Evento;
@@ -35,7 +36,7 @@ async function handleSubmit(event: React.FormEvent) {
 }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="evento-edit-form" onSubmit={handleSubmit}>
       <input
         type="date"
         value={data}
@@ -50,8 +51,8 @@ async function handleSubmit(event: React.FormEvent) {
 
       {erro && <p>{erro}</p>}
 
-      <button type="submit">Salvar alterações</button>
-      <button type="button" onClick={onCancelar}>
+      <button className="btn btn-primary" type="submit">Salvar alterações</button>
+      <button className="btn btn-secondary" type="button" onClick={onCancelar}>
         Cancelar
       </button>
     </form>

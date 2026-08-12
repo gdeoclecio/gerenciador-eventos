@@ -5,6 +5,7 @@ import { EventoForm } from "../components/EventoForm";
 import { useNavigate } from "react-router-dom";
 import { removerToken } from "../services/authService";
 import { EventoCard } from "../components/EventoCard";
+import "./HomePage.css";
 
 export function HomePage() {
   const [eventos, setEventos] = useState<Evento[]>([]);
