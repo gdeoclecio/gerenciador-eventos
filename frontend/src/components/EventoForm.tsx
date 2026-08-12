@@ -39,7 +39,8 @@ export function EventoForm({ onEventoCadastrado }: EventoFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="evento-form" onSubmit={handleSubmit}>
+       <h2>Adicionar Evento</h2> 
       <input
         type="text"
         placeholder="Nome do evento"
@@ -66,7 +67,7 @@ export function EventoForm({ onEventoCadastrado }: EventoFormProps) {
         value={imagem}
         onChange={(event) => setImagem(event.target.value)}
       />
-      <button type="submit">Adicionar Evento</button>
+      <button className="btn btn-primary" type="submit">Adicionar Evento</button>
        {erro && <p>{erro}</p>}
     </form>
   );

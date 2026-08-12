@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { excluirEvento, listarEventos } from "../services/eventoService";
 import type { Evento } from "../types/evento";
 import { EventoForm } from "../components/EventoForm";
-import { EventoEditForm } from "../components/EventoEditForm";
 import { useNavigate } from "react-router-dom";
 import { removerToken } from "../services/authService";
+import { EventoCard } from "../components/EventoCard";
 
 export function HomePage() {
   const [eventos, setEventos] = useState<Evento[]>([]);
@@ -55,41 +55,42 @@ export function HomePage() {
   }, []);
 
   return (
-    <div>
-      <h1>Meus Eventos</h1>
+    <main className="home-page">
+      <header className="home-header">
+        <div>
+          <h1>Meus Eventos</h1>
+          <p>Gerencie seus eventos em um só lugar.</p>
+        </div>
+
+        <button className="btn btn-secondary" type="button" onClick={handleLogout}>
+          Sair
+        </button>
+      </header>
+
       {erro && <p>{erro}</p>}
-      <button onClick={handleLogout}>Sair</button>
 
       <EventoForm onEventoCadastrado={recarregarEventos} />
 
       {eventos.length === 0 ? (
         <p>Nenhum evento cadastrado.</p>
       ) : (
-        eventos.map((evento) => (
-          <div key={evento.id}>
-            <h2>{evento.nome}</h2>
-            {evento.imagem && (
-              <img src={evento.imagem} alt={evento.nome} width="300" />
-            )}
-            <p>{evento.data}</p>
-            <p>{evento.localizacao}</p>
-
-            <button onClick={() => setEventoEmEdicao(evento.id)}>Editar</button>
-            <button onClick={() => handleExcluir(evento.id)}>Excluir</button>
-
-            {eventoEmEdicao === evento.id && (
-              <EventoEditForm
-                evento={evento}
-                onEventoAtualizado={() => {
-                  recarregarEventos();
-                  setEventoEmEdicao(null);
-                }}
-                onCancelar={() => setEventoEmEdicao(null)}
-              />
-            )}
-          </div>
-        ))
+        <div className="eventos-grid">
+          {eventos.map((evento) => (
+            <EventoCard
+              key={evento.id}
+              evento={evento}
+              emEdicao={eventoEmEdicao === evento.id}
+              onEditar={() => setEventoEmEdicao(evento.id)}
+              onCancelarEdicao={() => setEventoEmEdicao(null)}
+              onEventoAtualizado={() => {
+                recarregarEventos();
+                setEventoEmEdicao(null);
+              }}
+              onExcluir={() => handleExcluir(evento.id)}
+            />
+          ))}
+        </div>
       )}
-    </div>
+    </main>
   );
 }
