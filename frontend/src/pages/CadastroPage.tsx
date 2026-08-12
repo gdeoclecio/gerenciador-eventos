@@ -14,6 +14,10 @@ export function CadastroPage() {
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    if (!nome.trim() || !email.trim() || !senha || !confirmarSenha) {
+      setErro("Preencha todos os campos.");
+      return;
+    }
 
     if (senha !== confirmarSenha) {
       setMensagem("As senhas não coincidem");
@@ -47,28 +51,29 @@ export function CadastroPage() {
             type="text"
             placeholder="Nome"
             value={nome}
-            onChange={(event) => setNome(event.target.value)}
+            onChange={(event) => setNome(event.target.value)} required
           />
 
           <input
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(event) => setEmail(event.target.value)} required
           />
 
           <input
             type="password"
             placeholder="Senha"
             value={senha}
-            onChange={(event) => setSenha(event.target.value)}
+            onChange={(event) => setSenha(event.target.value)} required
           />
 
           <input
             type="password"
             placeholder="Confirmar senha"
             value={confirmarSenha}
-            onChange={(event) => setConfirmarSenha(event.target.value)}
+            minLength={6}
+            onChange={(event) => setConfirmarSenha(event.target.value)} required
           />
 
           <button className="btn btn-primary" type="submit">

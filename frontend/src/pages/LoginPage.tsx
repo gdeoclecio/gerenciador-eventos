@@ -24,6 +24,10 @@ export function LoginPage() {
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    if (!email.trim() || !senha) {
+      setErro("Preencha email e senha.");
+      return;
+    }
 
     try {
       setErro("");
@@ -65,6 +69,7 @@ export function LoginPage() {
             placeholder="Email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+            required
           />
 
           <input
@@ -72,6 +77,7 @@ export function LoginPage() {
             placeholder="Senha"
             value={senha}
             onChange={(event) => setSenha(event.target.value)}
+            required
           />
           <label>
             <input
