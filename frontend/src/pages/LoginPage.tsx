@@ -79,7 +79,7 @@ export function LoginPage() {
             onChange={(event) => setSenha(event.target.value)}
             required
           />
-          <label>
+          <label className="auth-checkbox">
             <input
               type="checkbox"
               checked={gravarSenha}

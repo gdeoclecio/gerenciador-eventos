@@ -1,24 +1,27 @@
 .evento-form {
   display: grid;
   gap: 16px;
-  padding: 24px;
-  margin-bottom: 32px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
 }
 
 .evento-form h2 {
-  margin: 0;
+  margin: 0 40px 6px 0;
 }
 
 .evento-form input {
   width: 100%;
-  padding: 12px;
+  padding: 12px 14px;
   border: 1px solid #d1d5db;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
+.evento-form .btn-primary {
+  width: fit-content;
+  margin-top: 8px;
+}
+.evento-form-campos {
+  display: grid;
+  gap: 12px;
+}
 @media (max-width: 768px) {
   .evento-form button {
     width: 100%;

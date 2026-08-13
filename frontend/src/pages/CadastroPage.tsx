@@ -51,21 +51,24 @@ export function CadastroPage() {
             type="text"
             placeholder="Nome"
             value={nome}
-            onChange={(event) => setNome(event.target.value)} required
+            onChange={(event) => setNome(event.target.value)}
+            required
           />
 
           <input
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(event) => setEmail(event.target.value)} required
+            onChange={(event) => setEmail(event.target.value)}
+            required
           />
 
           <input
             type="password"
             placeholder="Senha"
             value={senha}
-            onChange={(event) => setSenha(event.target.value)} required
+            onChange={(event) => setSenha(event.target.value)}
+            required
           />
 
           <input
@@ -73,11 +76,19 @@ export function CadastroPage() {
             placeholder="Confirmar senha"
             value={confirmarSenha}
             minLength={6}
-            onChange={(event) => setConfirmarSenha(event.target.value)} required
+            onChange={(event) => setConfirmarSenha(event.target.value)}
+            required
           />
 
           <button className="btn btn-primary" type="submit">
             Cadastrar
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => navigate("/login")}
+          >
+            Cancelar
           </button>
         </form>
       </section>

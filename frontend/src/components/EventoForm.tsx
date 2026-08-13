@@ -46,35 +46,43 @@ export function EventoForm({ onEventoCadastrado }: EventoFormProps) {
   return (
     <form className="evento-form" onSubmit={handleSubmit}>
       <h2>Adicionar Evento</h2>
-      <input
-        type="text"
-        placeholder="Nome do evento"
-        value={nome}
-        onChange={(event) => setNome(event.target.value)} required
-      />
+      <div className="evento-form-campos">
+        <input
+          type="text"
+          placeholder="Nome do evento"
+          value={nome}
+          onChange={(event) => setNome(event.target.value)}
+          required
+        />
 
-      <input
-        type="date"
-        value={data}
-        onChange={(event) => setData(event.target.value)} required
-      />
+        <input
+          type="date"
+          value={data}
+          onChange={(event) => setData(event.target.value)}
+          required
+        />
 
-      <input
-        type="text"
-        placeholder="Localização"
-        value={localizacao}
-        onChange={(event) => setLocalizacao(event.target.value)} required
-      />
+        <input
+          type="text"
+          placeholder="Localização"
+          value={localizacao}
+          onChange={(event) => setLocalizacao(event.target.value)}
+          required
+        />
 
-      <input
-        type="text"
-        placeholder="URL da imagem"
-        value={imagem}
-        onChange={(event) => setImagem(event.target.value)} required
-      />
-      <button className="btn btn-primary" type="submit">
-        Adicionar Evento
-      </button>
+        <input
+          type="text"
+          placeholder="URL da imagem"
+          value={imagem}
+          onChange={(event) => setImagem(event.target.value)}
+          required
+        />
+      </div>
+      
+        <button className="btn btn-primary" type="submit">
+          Adicionar Evento
+        </button>
+      
       {erro && <p>{erro}</p>}
     </form>
   );

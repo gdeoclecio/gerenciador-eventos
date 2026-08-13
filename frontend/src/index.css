@@ -66,3 +66,9 @@ input {
   color: #b91c1c;
   border: 1px solid #fecaca;
 }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}

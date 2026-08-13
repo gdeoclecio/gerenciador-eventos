@@ -37,15 +37,39 @@
   border-radius: 8px;
 }
 
+.auth-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-checkbox input {
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
 .auth-card a {
   text-align: center;
   color: #2563eb;
   text-decoration: none;
+  margin-top: -4px;
 }
 
 .auth-card a:hover {
   text-decoration: underline;
 }
+.auth-card .btn-primary {
+  width: fit-content;
+  justify-self: center;
+  padding: 10px 42px;
+}
+.auth-card .btn-secondary {
+  width: fit-content;
+  justify-self: center;
+  margin-top: -6px;
+}
+
 @media (max-width: 480px) {
   .auth-page {
     padding: 16px;
