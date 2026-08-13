@@ -3,7 +3,14 @@ import { Alert, Button, TextInput, View } from "react-native";
 
 import { cadastrarEvento } from "../services/eventoService";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { RootStackParamList } from "../routes/types";
 
+type EventoFormNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Home"
+>;
 interface EventoFormProps {
   onEventoCadastrado: () => void;
 }
@@ -13,6 +20,7 @@ export function EventoForm({ onEventoCadastrado }: EventoFormProps) {
   const [data, setData] = useState("");
   const [localizacao, setLocalizacao] = useState("");
   const [imagem, setImagem] = useState("");
+  const navigation = useNavigation<EventoFormNavigationProp>();
 
   async function handleCadastrar() {
     if (!nome.trim() || !data.trim() || !localizacao.trim() || !imagem.trim()) {
@@ -36,7 +44,12 @@ export function EventoForm({ onEventoCadastrado }: EventoFormProps) {
       onEventoCadastrado();
 
       Alert.alert("Sucesso", "Evento cadastrado com sucesso.");
-    } catch {
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        navigation.replace("Login");
+        return;
+      }
+
       Alert.alert("Erro", "Não foi possível cadastrar o evento.");
     }
   }

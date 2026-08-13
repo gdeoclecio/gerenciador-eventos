@@ -3,22 +3,59 @@ import { Alert, Button, FlatList, Image, Text, View } from "react-native";
 
 import { excluirEvento, listarEventos } from "../services/eventoService";
 import type { Evento } from "../types/evento";
-import { EventoForm } from "../components/EventoForm";
 import { EventoModal } from "../components/EventoModal";
 import { EventoEditForm } from "../components/EventoEditForm";
+import { removerToken } from "../storage/authStorage";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { RootStackParamList } from "../routes/types";
+import axios from "axios";
+
+type HomeNavigationProp = NativeStackNavigationProp<RootStackParamList, "Home">;
 
 export function HomeScreen() {
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [modalAberta, setModalAberta] = useState(false);
   const [eventoEmEdicao, setEventoEmEdicao] = useState<number | null>(null);
+  const navigation = useNavigation<HomeNavigationProp>();
+
+  function tratarErroAutenticacao(error: unknown) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      navigation.replace("Login");
+      return true;
+    }
+
+    return false;
+  }
+
+  async function handleLogout() {
+    await removerToken();
+    navigation.replace("Login");
+  }
 
   async function recarregarEventos() {
-    const resposta = await listarEventos();
-    setEventos(resposta);
+    try {
+      const resposta = await listarEventos();
+      setEventos(resposta);
+    } catch (error) {
+      if (tratarErroAutenticacao(error)) {
+        return;
+      }
+
+      Alert.alert("Erro", "Não foi possível carregar os eventos.");
+    }
   }
 
   useEffect(() => {
-    listarEventos().then(setEventos);
+    listarEventos()
+      .then(setEventos)
+      .catch((error) => {
+        if (tratarErroAutenticacao(error)) {
+          return;
+        }
+
+        Alert.alert("Erro", "Não foi possível carregar os eventos.");
+      });
   }, []);
 
   function handleExcluir(eventoId: number) {
@@ -39,7 +76,11 @@ export function HomeScreen() {
               await recarregarEventos();
 
               Alert.alert("Sucesso", "Evento excluído com sucesso.");
-            } catch {
+            } catch (error) {
+              if (tratarErroAutenticacao(error)) {
+                return;
+              }
+
               Alert.alert("Erro", "Não foi possível excluir o evento.");
             }
           },
@@ -93,6 +134,7 @@ export function HomeScreen() {
           </View>
         )}
       />
+      <Button title="Sair" onPress={handleLogout} />
     </View>
   );
 }

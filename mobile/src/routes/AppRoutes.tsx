@@ -6,6 +6,7 @@ import { CadastroScreen } from "../screens/CadastroScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import type { RootStackParamList } from "./types";
 
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function AppRoutes() {
