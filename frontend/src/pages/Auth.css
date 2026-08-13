@@ -46,6 +46,50 @@
 .auth-card a:hover {
   text-decoration: underline;
 }
+.senha-container {
+  position: relative;
+}
+
+.senha-container input {
+  width: 100%;
+  padding-right: 44px;
+}
+
+.senha-toggle {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.senha-toggle:hover {
+  color: #111827;
+}
+.gravar-senha {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  cursor: pointer;
+  color: #374151;
+  font-size: 14px;
+}
+
+.auth-card .gravar-senha input {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
 @media (max-width: 480px) {
   .auth-page {
     padding: 16px;
