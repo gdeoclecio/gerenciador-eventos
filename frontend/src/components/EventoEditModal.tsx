@@ -1,16 +1,19 @@
 import { X } from "lucide-react";
-import { EventoForm } from "./EventoForm";
+import type { Evento } from "../types/evento";
+import { EventoEditForm } from "./EventoEditForm";
 import "./EventoModal.css";
 
-interface EventoModalProps {
+interface EventoEditModalProps {
+  evento: Evento;
   onFechar: () => void;
-  onEventoCadastrado: () => void;
+  onEventoAtualizado: () => void;
 }
 
-export function EventoModal({
+export function EventoEditModal({
+  evento,
   onFechar,
-  onEventoCadastrado,
-}: EventoModalProps) {
+  onEventoAtualizado,
+}: EventoEditModalProps) {
   return (
     <div className="modal-overlay" onClick={onFechar}>
       <div
@@ -25,21 +28,17 @@ export function EventoModal({
         >
           <X size={20} />
         </button>
-       <div className="modal-acoes">
-        <EventoForm
-          onEventoCadastrado={() => {
-            onEventoCadastrado();
+
+        <h2>Editar Evento</h2>
+
+        <EventoEditForm
+          evento={evento}
+          onEventoAtualizado={() => {
+            onEventoAtualizado();
             onFechar();
           }}
+          onCancelar={onFechar}
         />
-        <button
-          type="button"
-          className="btn btn-secondary modal-botao-fechar"
-          onClick={onFechar}
-        >
-          Fechar
-        </button>
-        </div>
       </div>
     </div>
   );

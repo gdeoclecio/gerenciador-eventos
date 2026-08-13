@@ -1,41 +1,82 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  padding: 20px;
-  z-index: 1000;
+  padding: 24px;
+
+  background: rgba(17, 24, 39, 0.55);
+  backdrop-filter: blur(3px);
 }
 
 .modal-conteudo {
   position: relative;
+
   width: 100%;
-  max-width: 650px;
-  background: white;
-  border-radius: 12px;
-  padding: 24px;
+  max-width: 620px;
+
+  padding: 28px;
+
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
 }
 
 .modal-fechar {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 18px;
+  right: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
 
   border: none;
-  background: transparent;
-  font-size: 24px;
+  border-radius: 8px;
+
+  background: #f3f4f6;
+  color: #4b5563;
+
   cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.modal-conteudo .evento-form {
-  margin-bottom: 0;
-  padding: 0;
-  border: none;
+.modal-fechar:hover {
+  background: #e5e7eb;
+  color: #111827;
 }
 .modal-botao-fechar {
-  margin-top: 16px;
+  width: fit-content;
+  margin-top: 12px;
+}
+.modal-acoes {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+.confirm-modal-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 16px;
+  }
+
+  .modal-conteudo {
+    padding: 22px 18px;
+    border-radius: 14px;
+  }
 }

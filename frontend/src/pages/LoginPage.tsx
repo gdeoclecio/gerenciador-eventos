@@ -92,6 +92,7 @@ export function LoginPage() {
               {mostrarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
+
           <label className="gravar-senha">
             <input
               type="checkbox"
