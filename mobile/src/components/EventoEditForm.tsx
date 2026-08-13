@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Alert, Button, TextInput, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 import { atualizarEvento } from "../services/eventoService";
 import type { Evento } from "../types/evento";
@@ -23,9 +30,32 @@ export function EventoEditForm({
   onEventoAtualizado,
   onCancelar,
 }: EventoEditFormProps) {
-  const [data, setData] = useState(evento.data);
+  const [data, setData] = useState(() => {
+    const [ano, mes, dia] = evento.data.split("-");
+    return `${dia}/${mes}/${ano}`;
+  });
   const [localizacao, setLocalizacao] = useState(evento.localizacao);
   const navigation = useNavigation<EventoEditFormNavigationProp>();
+
+  function formatarData(valor: string) {
+    const numeros = valor.replace(/\D/g, "").slice(0, 8);
+
+    if (numeros.length <= 2) {
+      return numeros;
+    }
+
+    if (numeros.length <= 4) {
+      return `${numeros.slice(0, 2)}/${numeros.slice(2)}`;
+    }
+
+    return `${numeros.slice(0, 2)}/${numeros.slice(2, 4)}/${numeros.slice(4)}`;
+  }
+
+  function converterDataParaApi(data: string) {
+    const [dia, mes, ano] = data.split("/");
+
+    return `${ano}-${mes}-${dia}`;
+  }
 
   async function handleAtualizar() {
     if (!data.trim() && !localizacao.trim()) {
@@ -35,7 +65,7 @@ export function EventoEditForm({
 
     try {
       await atualizarEvento(evento.id, {
-        data,
+        data: converterDataParaApi(data),
         localizacao,
       });
 
@@ -53,22 +83,74 @@ export function EventoEditForm({
   }
 
   return (
-    <View>
+    <View style={styles.form}>
       <TextInput
-        placeholder="Data (AAAA-MM-DD)"
+        style={styles.input}
+        placeholder="Data (DD/MM/AAAA)"
         value={data}
-        onChangeText={setData}
+        onChangeText={(valor) => setData(formatarData(valor))}
+        keyboardType="numeric"
+        maxLength={10}
       />
 
       <TextInput
+        style={styles.input}
         placeholder="Localização"
         value={localizacao}
         onChangeText={setLocalizacao}
       />
 
-      <Button title="Salvar alterações" onPress={handleAtualizar} />
+      <Pressable style={styles.botaoPrincipal} onPress={handleAtualizar}>
+        <Text style={styles.textoBotaoPrincipal}>Salvar alterações</Text>
+      </Pressable>
 
-      <Button title="Cancelar" onPress={onCancelar} />
+      <Pressable style={styles.botaoSecundario} onPress={onCancelar}>
+        <Text style={styles.textoBotaoSecundario}>Cancelar</Text>
+      </Pressable>
     </View>
   );
 }
+const styles = StyleSheet.create({
+  form: {
+    gap: 14,
+  },
+
+  input: {
+    borderWidth: 1,
+    borderColor: "#d1d5db",
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 16,
+    backgroundColor: "#ffffff",
+  },
+
+  botaoPrincipal: {
+    backgroundColor: "#2563eb",
+    borderRadius: 10,
+    paddingVertical: 13,
+    alignItems: "center",
+    marginTop: 4,
+  },
+
+  textoBotaoPrincipal: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+
+  botaoSecundario: {
+    alignSelf: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: "#d1d5db",
+    borderRadius: 10,
+  },
+
+  textoBotaoSecundario: {
+    color: "#374151",
+    fontSize: 15,
+    fontWeight: "600",
+  },
+});

@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { Alert, Button, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 import { login } from "../services/authService";
 import { salvarToken } from "../storage/authStorage";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../routes/types";
@@ -36,10 +42,16 @@ export function LoginScreen() {
   }
 
   return (
-    <View>
-      <Text>Login</Text>
+  <View style={styles.container}>
+    <View style={styles.card}>
+      <Text style={styles.titulo}>Entrar</Text>
+
+      <Text style={styles.subtitulo}>
+        Acesse sua conta para gerenciar seus eventos.
+      </Text>
 
       <TextInput
+        style={styles.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
@@ -48,17 +60,82 @@ export function LoginScreen() {
       />
 
       <TextInput
+        style={styles.input}
         placeholder="Senha"
         value={senha}
         onChangeText={setSenha}
         secureTextEntry
       />
 
-      <Button title="Entrar" onPress={handleLogin} />
-      <Button
-        title="Cadastrar-se"
-        onPress={() => navigation.navigate("Cadastro" as never)}
-      />
+      <Pressable style={styles.botaoPrincipal} onPress={handleLogin}>
+        <Text style={styles.textoBotaoPrincipal}>Entrar</Text>
+      </Pressable>
+
+      <Pressable onPress={() => navigation.navigate("Cadastro")}>
+        <Text style={styles.link}>Cadastrar-se</Text>
+      </Pressable>
     </View>
-  );
+  </View>
+);
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 24,
+    backgroundColor: "#f5f6f8",
+  },
+
+  card: {
+    backgroundColor: "#ffffff",
+    padding: 28,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#e5e7eb",
+  },
+
+  titulo: {
+    fontSize: 30,
+    fontWeight: "700",
+    color: "#111827",
+    marginBottom: 8,
+  },
+
+  subtitulo: {
+    fontSize: 16,
+    color: "#6b7280",
+    marginBottom: 24,
+  },
+
+  input: {
+    borderWidth: 1,
+    borderColor: "#d1d5db",
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 16,
+    marginBottom: 14,
+    backgroundColor: "#ffffff",
+  },
+
+  botaoPrincipal: {
+    backgroundColor: "#2563eb",
+    borderRadius: 10,
+    paddingVertical: 13,
+    alignItems: "center",
+    marginTop: 4,
+  },
+
+  textoBotaoPrincipal: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+
+  link: {
+    textAlign: "center",
+    color: "#2563eb",
+    fontSize: 16,
+    marginTop: 18,
+  },
+});

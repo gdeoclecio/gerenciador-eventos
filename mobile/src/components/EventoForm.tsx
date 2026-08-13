@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Alert, Button, TextInput, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 import { cadastrarEvento } from "../services/eventoService";
 import axios from "axios";
@@ -31,7 +38,7 @@ export function EventoForm({ onEventoCadastrado }: EventoFormProps) {
     try {
       await cadastrarEvento({
         nome,
-        data,
+        data: converterDataParaApi(data),
         localizacao,
         imagem,
       });
@@ -53,35 +60,90 @@ export function EventoForm({ onEventoCadastrado }: EventoFormProps) {
       Alert.alert("Erro", "Não foi possível cadastrar o evento.");
     }
   }
+  function formatarData(valor: string) {
+    const numeros = valor.replace(/\D/g, "").slice(0, 8);
+
+    if (numeros.length <= 2) {
+      return numeros;
+    }
+
+    if (numeros.length <= 4) {
+      return `${numeros.slice(0, 2)}/${numeros.slice(2)}`;
+    }
+
+    return `${numeros.slice(0, 2)}/${numeros.slice(2, 4)}/${numeros.slice(4)}`;
+  }
+  function converterDataParaApi(data: string) {
+  const [dia, mes, ano] = data.split("/");
+
+  return `${ano}-${mes}-${dia}`;
+}
 
   return (
-    <View>
+    <View style={styles.form}>
       <TextInput
+        style={styles.input}
         placeholder="Nome do evento"
         value={nome}
         onChangeText={setNome}
       />
 
       <TextInput
-        placeholder="Data (AAAA-MM-DD)"
+        style={styles.input}
+        placeholder="Data (DD/MM/AAAA)"
         value={data}
-        onChangeText={setData}
+        onChangeText={(valor) => setData(formatarData(valor))}
+        keyboardType="numeric"
+        maxLength={10}
       />
 
       <TextInput
+        style={styles.input}
         placeholder="Localização"
         value={localizacao}
         onChangeText={setLocalizacao}
       />
 
       <TextInput
+        style={styles.input}
         placeholder="URL da imagem"
         value={imagem}
         onChangeText={setImagem}
         autoCapitalize="none"
       />
 
-      <Button title="Adicionar Evento" onPress={handleCadastrar} />
+      <Pressable style={styles.botaoPrincipal} onPress={handleCadastrar}>
+        <Text style={styles.textoBotaoPrincipal}>Adicionar Evento</Text>
+      </Pressable>
     </View>
   );
 }
+const styles = StyleSheet.create({
+  form: {
+    gap: 14,
+  },
+
+  input: {
+    borderWidth: 1,
+    borderColor: "#d1d5db",
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 16,
+    backgroundColor: "#ffffff",
+  },
+
+  botaoPrincipal: {
+    backgroundColor: "#2563eb",
+    borderRadius: 10,
+    paddingVertical: 13,
+    alignItems: "center",
+    marginTop: 4,
+  },
+
+  textoBotaoPrincipal: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+});

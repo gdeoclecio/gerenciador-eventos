@@ -6,16 +6,27 @@ import { CadastroScreen } from "../screens/CadastroScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import type { RootStackParamList } from "./types";
 
-
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function AppRoutes() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Cadastro" component={CadastroScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Cadastro"
+          component={CadastroScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

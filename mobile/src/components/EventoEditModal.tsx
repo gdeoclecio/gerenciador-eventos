@@ -3,22 +3,24 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  View,
 } from "react-native";
 
-import { EventoForm } from "./EventoForm";
+import type { Evento } from "../types/evento";
+import { EventoEditForm } from "./EventoEditForm";
 
-interface EventoModalProps {
+interface EventoEditModalProps {
+  evento: Evento;
   visivel: boolean;
   onFechar: () => void;
-  onEventoCadastrado: () => void;
+  onEventoAtualizado: () => void;
 }
 
-export function EventoModal({
+export function EventoEditModal({
+  evento,
   visivel,
   onFechar,
-  onEventoCadastrado,
-}: EventoModalProps) {
+  onEventoAtualizado,
+}: EventoEditModalProps) {
   return (
     <Modal
       visible={visivel}
@@ -31,22 +33,20 @@ export function EventoModal({
           style={styles.modal}
           onPress={(event) => event.stopPropagation()}
         >
-          <Text style={styles.titulo}>Adicionar Evento</Text>
+          <Text style={styles.titulo}>Editar Evento</Text>
 
           <Text style={styles.subtitulo}>
-            Preencha os dados do novo evento.
+            Atualize a data ou a localização do evento.
           </Text>
 
-          <EventoForm
-            onEventoCadastrado={() => {
-              onEventoCadastrado();
+          <EventoEditForm
+            evento={evento}
+            onEventoAtualizado={() => {
+              onEventoAtualizado();
               onFechar();
             }}
+            onCancelar={onFechar}
           />
-
-          <Pressable style={styles.botaoCancelar} onPress={onFechar}>
-            <Text style={styles.textoCancelar}>Cancelar</Text>
-          </Pressable>
         </Pressable>
       </Pressable>
     </Modal>
@@ -78,21 +78,5 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#6b7280",
     marginBottom: 20,
-  },
-
-  botaoCancelar: {
-    alignSelf: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    marginTop: 12,
-    borderWidth: 1,
-    borderColor: "#d1d5db",
-    borderRadius: 10,
-  },
-
-  textoCancelar: {
-    color: "#374151",
-    fontWeight: "600",
-    fontSize: 15,
   },
 });
