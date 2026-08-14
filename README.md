@@ -116,16 +116,22 @@ As seguintes variáveis devem ser configuradas:
 
 
 DB_URL
+
 DB_USERNAME
+
 DB_PASSWORD
+
 JWT_SECRET
 
 
 Exemplo de valores:
 
 DB_URL=jdbc:postgresql://localhost:5432/gerenciador_eventos
+
 DB_USERNAME=postgres
+
 DB_PASSWORD=sua_senha
+
 JWT_SECRET=seu_segredo_jwt
 
 
@@ -135,7 +141,9 @@ O arquivo `application.properties` utiliza essas variáveis:
 
 
 spring.datasource.url=${DB_URL}
+
 spring.datasource.username=${DB_USERNAME}
+
 spring.datasource.password=${DB_PASSWORD}
 
 jwt.secret=${JWT_SECRET}
