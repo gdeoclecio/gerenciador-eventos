@@ -304,4 +304,4 @@ A aplicação foi desenvolvida buscando separar responsabilidades entre controll
 
 ---
 
-Desenvolvido para o **Desafio da Residência - Gerenciador de Eventos**.
+Desenvolvido para o **Desafio processo seletivo Neki - Gerenciador de Eventos**.
